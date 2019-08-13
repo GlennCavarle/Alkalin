@@ -10,12 +10,10 @@ BaselineOfAlkalin >> baseline: spec [
 	spec
 		for: #common
 		do: [ 
-			spec
-				baseline: 'TaskIt'
-				with: [ spec repository: 'github://sbragagnolo/taskit' ].
-				
+			
 			spec 
-				package: #'Alkalin-Actor' with: [ spec requires: #(#'TaskIt' #'Alkalin-Monad') ];
+				package: #'Alkalin-Actor' with: [ spec requires: #(#'Alkalin-Concurrent' #'Alkalin-Monad') ];
+				package: #'Alkalin-Concurrent' ;
 				package: #'Alkalin-Http' ;
 				package: #'Alkalin-Monad'
 		]
