@@ -21,12 +21,12 @@ AKTDispatcher class >> new [
 	self error: 'Use #named: instead'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 AKTDispatcher >> createMailbox [
 	^ AKTMailbox new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 AKTDispatcher >> dispatch: anEnvelope receiver: aReceiver [ 
 	aReceiver mailbox enqueue: anEnvelope.
 	self processMailbox: aReceiver mailbox
@@ -34,7 +34,7 @@ AKTDispatcher >> dispatch: anEnvelope receiver: aReceiver [
 
 { #category : #'task execution' }
 AKTDispatcher >> executeTask: aTask [
-	workerPool schedule: aTask
+	workerPool execute: aTask
 ]
 
 { #category : #initialization }
@@ -51,10 +51,11 @@ AKTDispatcher >> initializeWithName: aString [
 
 { #category : #initialization }
 AKTDispatcher >> initializeWorkerPool [
-	workerPool := TKTWorkerPool new.
-	workerPool name: ('akt-{NAME}-{ID}' format: {(#NAME -> name).(#ID -> UUID new)} asDictionary).
-	workerPool poolMaxSize: 5.
-	workerPool start
+	workerPool := (AKCFixedThreadPool
+		named:('akt-{NAME}-{ID}' format:
+					{(#NAME -> name).
+					(#ID -> UUID new)} asDictionary)
+		maxPoolSize: 5) 
 ]
 
 { #category : #accessing }
@@ -62,20 +63,19 @@ AKTDispatcher >> name [
 	^ name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 AKTDispatcher >> processMailbox: aMailbox [
 
 	(aMailbox isRunning or:[aMailbox isClosed]) ifTrue:[^ self].
-	workerPool schedule: aMailbox task.
+	self executeTask: aMailbox task.
 ]
 
 { #category : #lifecycle }
 AKTDispatcher >> stop [
 	workerPool stop.
-	workerPool purge
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 AKTDispatcher >> systemDispatch: aSystemMessage receiver: aReceiver [ 
 	aReceiver mailbox systemEnqueue: aSystemMessage.
 	self processMailbox: aReceiver mailbox

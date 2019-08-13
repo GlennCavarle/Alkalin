@@ -99,8 +99,8 @@ AKTActorBox >> systemReceive: aSystemMessage [
 
 { #category : #private }
 AKTActorBox >> terminate [
-	mailbox close.
-	actor postStop.
+	mailbox ifNotNil:[:m| m close].
+	actor ifNotNil:[:a| a postStop].
 	actor := nil.
 	context := nil.
 	dispatcher := nil.

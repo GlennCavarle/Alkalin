@@ -1,6 +1,6 @@
 Class {
 	#name : #AKTActorRef,
-	#superclass : #Object,
+	#superclass : #AKTAbstractActorRef,
 	#instVars : [
 		'name',
 		'system',
@@ -19,12 +19,6 @@ AKTActorRef class >> named: aString actorFactory: anActorFactory system: anActor
 { #category : #'as yet unclassified' }
 AKTActorRef class >> new [
 	self error: 'Use #named:dispatcher:actorClass: instead'
-]
-
-{ #category : #instructions }
-AKTActorRef >> ask: aMessage [
-<return:#Future>
-	^ self ask: aMessage sender: nil
 ]
 
 { #category : #instructions }
@@ -53,18 +47,11 @@ AKTActorRef >> name [
 
 { #category : #lifecycle }
 AKTActorRef >> stop [ 
-	"actorBox stop."
+	actorBox stop.
 	system := nil.
 	dispatcher := nil.
 	actorFactory := nil.
 	actorBox := nil.
-]
-
-{ #category : #instructions }
-AKTActorRef >> tell: aMessage [ 
-	<return:#self>
-	^ self tell: aMessage sender: nil.
-	
 ]
 
 { #category : #instructions }

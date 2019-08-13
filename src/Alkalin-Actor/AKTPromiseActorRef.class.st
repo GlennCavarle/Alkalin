@@ -1,6 +1,6 @@
 Class {
 	#name : #AKTPromiseActorRef,
-	#superclass : #Object,
+	#superclass : #AKTAbstractActorRef,
 	#instVars : [
 		'future'
 	],
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #accessing }
-AKTPromiseActorRef >> ask: aMessage [
+AKTPromiseActorRef >> ask: aMessage sender: aSender [
 	future
 		deployFailure: (Error new messageText: 'PromiseActorRef cannot be asked')
 ]
@@ -21,10 +21,10 @@ AKTPromiseActorRef >> future [
 { #category : #initialization }
 AKTPromiseActorRef >> initialize [ 
 	super initialize.
-	future := TKTFuture new 
+	future := AKCFuture new 
 ]
 
 { #category : #accessing }
-AKTPromiseActorRef >> tell: aMessage [
-	future deploySuccess: aMessage
+AKTPromiseActorRef >> tell: aMessage sender: aSender [
+	future completeWith: aMessage
 ]

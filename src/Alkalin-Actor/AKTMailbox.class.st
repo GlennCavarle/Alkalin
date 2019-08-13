@@ -33,6 +33,17 @@ AKTMailbox >> dequeue [
 	^ messageQueue nextOrNil 
 ]
 
+{ #category : #running }
+AKTMailbox >> doProcess [
+	self isClosed ifTrue:[^ self].
+	mutex
+		critical: [ isRunning := true.
+			[ self
+				processSystemMessages;
+				processMessages ]
+				ensure: [ isRunning := false ] ]
+]
+
 { #category : #actions }
 AKTMailbox >> enqueue: aMessage [
 	messageQueue nextPut: aMessage
@@ -46,7 +57,7 @@ AKTMailbox >> initialize [
 	isRunning := false.
 	isClosed := false.
 	mutex := Mutex new.
-	task := [ self process ] asTask
+	task := [ self doProcess ]
 ]
 
 { #category : #testing }
@@ -57,17 +68,6 @@ AKTMailbox >> isClosed [
 { #category : #testing }
 AKTMailbox >> isRunning [
 	^ isRunning
-]
-
-{ #category : #running }
-AKTMailbox >> process [
-	self isClosed ifTrue:[^ self].
-	mutex
-		critical: [ isRunning := true.
-			[ self
-				processSystemMessages;
-				processMessages ]
-				ensure: [ isRunning := false ] ]
 ]
 
 { #category : #running }

@@ -6,11 +6,17 @@ Class {
 
 { #category : #tests }
 AKTActorTest >> test [
-	| system actorRef |
+	| system actorRef f |
 	system := AKTSystem named: 'test-system'.
-	actorRef := system createActor: [ AKTActor new ] named: 'test-actor'.
-	(actorRef ask: 'hello') onSuccessDo: [ :r|
+	actorRef := system createActor: [ AKTTestingActor new ] named: 'test-actor'.
+	
+	f := (actorRef ? 'hello').
+	
+	f onSuccessDo: [ :r|
 		self assert: true.
+		Transcript crShow: r.
 		system terminate 
-	]
+	].
+
+	f waitForCompletion: 2 seconds
 ]
