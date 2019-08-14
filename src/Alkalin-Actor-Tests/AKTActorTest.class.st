@@ -18,5 +18,6 @@ AKTActorTest >> test [
 		system terminate 
 	].
 
-	f waitForCompletion: 2 seconds
+	f waitForCompletion: 2 seconds.
+	self assert: f isCompleted
 ]

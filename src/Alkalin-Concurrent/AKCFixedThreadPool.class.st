@@ -26,7 +26,7 @@ AKCFixedThreadPool class >> named: aString maxPoolSize: maxInteger minPoolSize: 
 
 { #category : #private }
 AKCFixedThreadPool >> createMasterWorker [
-	masterWorker := (AKCThreadPoolWorker named: self name , ' Master Worker') 
+	masterWorker := (AKCThreadPoolWorker named: self name , ' Master Worker')
 		start;
 		execute: [self masterWorkerTask];
 		yourself
@@ -68,26 +68,18 @@ AKCFixedThreadPool >> initialize [
 	name := 'akc-default-executor'.
 	maxPoolSize := 4.
 	minPoolSize := 1.
-	workers := Set new.
-	taskQueue := SharedQueue new.
-	self ensureMasterWorker.
+	self start.
 	
 	
-]
-
-{ #category : #initialization }
-AKCFixedThreadPool >> initializeWithName: aString maxPoolSize: anInteger [ 
-	self initialize.
-	name := aString.
-	maxPoolSize := anInteger.
 ]
 
 { #category : #initialization }
 AKCFixedThreadPool >> initializeWithName: aString maxPoolSize: maxInteger minPoolSize: minInteger [
-	self initialize.
+	super initialize.
 	name := aString.
 	maxPoolSize := maxInteger.
 	minPoolSize := minInteger.
+	self start.
 ]
 
 { #category : #private }
@@ -144,6 +136,13 @@ AKCFixedThreadPool >> queuedTaskCount [
 AKCFixedThreadPool >> signalNewTask [
 	self ensureMasterWorker
 	
+]
+
+{ #category : #'lifecycle actions' }
+AKCFixedThreadPool >> start [
+	workers ifNil:[workers := Set new].
+	taskQueue ifNil:[taskQueue := SharedQueue new].
+	self ensureMasterWorker.
 ]
 
 { #category : #'lifecycle actions' }

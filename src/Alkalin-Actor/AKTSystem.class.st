@@ -55,7 +55,7 @@ AKTSystem >> initializeWithName: aString [
 ]
 
 { #category : #initialization }
-AKTSystem >> terminate [
+AKTSystem >> stop [
 	actors stopAll.
 	dispatchers stopAll.
 	

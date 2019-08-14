@@ -10,10 +10,7 @@ Class {
 { #category : #'as yet unclassified' }
 AKCExecutor class >> defaultExecutor [
 	^ DefaultExecutor
-		ifNil: [ DefaultExecutor := AKCFixedThreadPool
-				named: 'ak-default'
-				maxPoolSize: 4
-				minPoolSize: 1 ]
+		ifNil: [ DefaultExecutor := AKCFixedThreadPool new ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -47,7 +47,7 @@ AKTActorRef >> name [
 
 { #category : #lifecycle }
 AKTActorRef >> stop [ 
-	actorBox stop.
+	actorBox ifNotNil:[:ab| ab stop].
 	system := nil.
 	dispatcher := nil.
 	actorFactory := nil.

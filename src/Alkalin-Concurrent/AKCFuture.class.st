@@ -54,6 +54,16 @@ AKCFuture >> isCompleted [
 	^ result isCompleted
 ]
 
+{ #category : #testing }
+AKCFuture >> isFailure [
+	^ result isFailure
+]
+
+{ #category : #testing }
+AKCFuture >> isSuccess [
+	^ result isSuccess
+]
+
 { #category : #callbacks }
 AKCFuture >> onCompleteDo: aCompleteBlock [
 	result onCompleteDo: aCompleteBlock inFuture: self

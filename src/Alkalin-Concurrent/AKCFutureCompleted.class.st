@@ -25,6 +25,11 @@ AKCFutureCompleted >> isCompleted [
 	^ true
 ]
 
+{ #category : #testing }
+AKCFutureCompleted >> isSuccess [
+	^ (value isKindOf: Error) not
+]
+
 { #category : #enumerating }
 AKCFutureCompleted >> onCompleteDo: aCompleteBlock inFuture: aFuture [
 	aFuture executeCallback: aCompleteBlock

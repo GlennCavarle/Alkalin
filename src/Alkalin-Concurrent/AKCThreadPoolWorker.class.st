@@ -77,7 +77,8 @@ AKCThreadPoolWorker >> name [
 { #category : #'lifecycle actions' }
 AKCThreadPoolWorker >> resume [
 	(self isBusy or: [ self isTerminated ]) ifTrue: [ ^ self ].
-	process resume
+	process isSuspended ifTrue:[process resume]
+	
 ]
 
 { #category : #'lifecycle actions' }
